@@ -3,7 +3,6 @@ import { getData } from '../data';
 import { Gantt, version } from '../../src/';
 import { Toolbar, registerToolbarItem } from '@svar-ui/react-toolbar';
 import { Switch, RichSelect, Segmented } from '@svar-ui/react-core';
-import { Calendar } from '@svar-ui/gantt-store';
 import './ProExport.css';
 
 registerToolbarItem('switch', Switch);
@@ -106,7 +105,7 @@ export default function ProExport({ skinSettings }) {
     [],
   );
 
-  const calendar = useMemo(() => new Calendar(), []);
+  const calendar = true;
 
   function handleClick({ item }) {
     const parts = item.id.split('-');
@@ -170,7 +169,7 @@ export default function ProExport({ skinSettings }) {
   return (
     <>
       <Toolbar items={items} onClick={handleClick} onChange={handleChange} />
-      <div className="gtcell">
+      <div className="gtcell wx-Q1zY5wV3">
         {config === 'basic' ? (
           <Gantt
             init={setApi}

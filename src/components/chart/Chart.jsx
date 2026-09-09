@@ -63,20 +63,21 @@ function Chart(props) {
     const el = chartRef.current;
     if (!el) return;
 
-    if (isUserScrollRef.current) {
-      isUserScrollRef.current = false;
-      return;
-    }
+    // the browser clamps scrollTop to the scrollable height at write time,
+    // so a height change must force the offset to be applied again
+    const userScrolled = isUserScrollRef.current;
+    isUserScrollRef.current = false;
 
     if (typeof rScrollTop === 'number') {
       expectedScroll.current.top = rScrollTop;
       el.scrollTop = rScrollTop;
     }
-    if (typeof rScrollLeft === 'number') {
+    // do not fight a horizontal scroll the user just performed
+    if (!userScrolled && typeof rScrollLeft === 'number') {
       expectedScroll.current.left = rScrollLeft;
       el.scrollLeft = rScrollLeft;
     }
-  }, [rScrollTop, rScrollLeft]);
+  }, [rScrollTop, rScrollLeft, chartGridHeight, chartHeight]);
 
   const onScroll = () => {
     const el = chartRef.current;

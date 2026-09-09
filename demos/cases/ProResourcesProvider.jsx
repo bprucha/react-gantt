@@ -5,7 +5,7 @@ import './ProResourcesProvider.css';
 
 export default function ProResourcesProvider() {
 	const restProvider = useMemo(
-		() => new RestDataProvider('https://master--svar-gantt-go--dev.webix.io'),
+		() => new RestDataProvider('https://gantt-backend.svar.dev'),
 		[],
 	);
 

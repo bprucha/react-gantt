@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { getData } from '../data';
 import { Gantt, Editor, ContextMenu } from '../../src';
 import { DatePicker, Field, Checkbox } from '@svar-ui/react-core';
-import { Calendar } from '@svar-ui/gantt-store';
+import { defaultColumns } from '@svar-ui/gantt-store';
 import './ProScheduleAll.css';
 
 function ProScheduleAll({ skinSettings }) {
@@ -16,9 +16,17 @@ function ProScheduleAll({ skinSettings }) {
   );
 
   const [api, setApi] = useState();
-  const [tasks, setTasks] = useState(data.tasks);
+  const [tasks, setTasks] = useState(
+    data.tasks.map((t) => {
+      const copy = { ...t };
+      delete copy.calendar;
+      return copy;
+    }),
+  );
 
-  const calendar = useMemo(() => new Calendar(), []);
+  const calendar = true;
+  const [taskCalendars, setTaskCalendars] = useState(false);
+  const [calendarsList, setCalendarsList] = useState([]);
   const [projectStart, setProjectStart] = useState(new Date(2026, 3, 2));
   const [projectEnd, setProjectEnd] = useState(new Date(2026, 4, 20));
 
@@ -26,8 +34,39 @@ function ProScheduleAll({ skinSettings }) {
   const [baselines, setBaselines] = useState(true);
   const [unscheduledTasks, setUnscheduledTasks] = useState(true);
   const [splitTasks, setSplitTasks] = useState(true);
+  const [slack, setSlack] = useState(false);
 
   const [cellHeight, setCellHeight] = useState(44);
+
+  const slackColumns = [
+    {
+      id: 'text',
+      header: 'Task name',
+      flexgrow: 1,
+    },
+    {
+      id: 'duration',
+      header: 'Duration',
+      align: 'center',
+      width: 100,
+    },
+    {
+      id: 'slack',
+      header: 'Total slack',
+      align: 'center',
+      width: 100,
+      getter: t => t.slack?.totalSlack,
+      template: v => v || '-',
+    },
+    {
+      id: 'add-task',
+      header: 'Add task',
+      width: 37,
+      align: 'center',
+    },
+  ];
+
+  const columns = useMemo(() => (slack ? slackColumns : defaultColumns), [slack]);
 
   const markers = useMemo(
     () =>
@@ -51,6 +90,24 @@ function ProScheduleAll({ skinSettings }) {
   function onBaselinesChange(ev) {
     setBaselines(ev.value);
     setCellHeight(ev.value ? 44 : 38);
+  }
+
+  function onTaskCalendarsChange(ev) {
+    const value = ev.value;
+    setTaskCalendars(value);
+    setCalendarsList(value ? data.calendars : []);
+    setTasks(
+      (api ? api.serialize() : tasks).map((t) => {
+        if (!value) {
+          const copy = { ...t };
+          delete copy.calendar;
+          return copy;
+        }
+        if (t.id === 10 || t.id === 23)
+          return { ...t, calendar: 'wednesday-off' };
+        return t;
+      }),
+    );
   }
 
   function onSplitChange() {
@@ -129,6 +186,16 @@ function ProScheduleAll({ skinSettings }) {
             onSplitChange();
           }}
         />
+        <Checkbox
+          value={slack}
+          label="Slack"
+          onChange={({ value }) => setSlack(value)}
+        />
+        <Checkbox
+          value={taskCalendars}
+          label="Task calendars"
+          onChange={onTaskCalendarsChange}
+        />
       </div>
       <div className="gantt wx-D71fWZ7y">
         {api && <Editor api={api} />}
@@ -142,6 +209,7 @@ function ProScheduleAll({ skinSettings }) {
             links={data.links}
             scales={data.scales}
             calendar={calendar}
+            calendars={calendarsList}
             schedule={{ auto: true }}
             criticalPath={criticalPath}
             projectStart={projectStart}
@@ -150,6 +218,8 @@ function ProScheduleAll({ skinSettings }) {
             baselines={baselines}
             unscheduledTasks={unscheduledTasks}
             splitTasks={splitTasks}
+            slack={slack}
+            columns={columns}
           />
         </ContextMenu>
       </div>

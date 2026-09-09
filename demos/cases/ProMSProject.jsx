@@ -1,6 +1,6 @@
 import { getData } from "../data";
 import { Gantt } from "../../src";
-import { Toolbar, registerToolbarItem } from "@wx/react-toolbar";
+import { Toolbar, registerToolbarItem } from "@svar/react-toolbar";
 import UploadButton from "../custom/UploadButton";
 import { useCallback, useState } from "react";
 
@@ -46,7 +46,7 @@ export default function ProMSProject({ skinSettings }) {
     return (
         <>
             <Toolbar items={items} onClick={handleClick} />
-            <div className="gtcell">
+            <div className="gtcell wx-S4tH9lK0">
                 <Gantt
                     init={setApi}
                     {...skinSettings}

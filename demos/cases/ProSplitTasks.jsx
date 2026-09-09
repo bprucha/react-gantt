@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { getData } from '../data';
-import { Gantt, ContextMenu, Editor, Toolbar } from '../../src/';
+import { Gantt, ContextMenu, Editor, Toolbar, Tooltip } from '../../src/';
+import MySegmentTooltip from '../custom/MySegmentTooltip';
 import './ProSplitTasks.css';
 
 export default function ProSplitTasks({ skinSettings }) {
@@ -10,16 +11,18 @@ export default function ProSplitTasks({ skinSettings }) {
   return (
     <>
       <Toolbar api={api} />
-      <div className="gtcell">
+      <div className="gtcell wx-4eOjA4yB">
         <ContextMenu api={api}>
-          <Gantt
-            init={setApi}
-            {...skinSettings}
-            tasks={data.tasks}
-            links={data.links}
-            scales={data.scales}
-            splitTasks={true}
-          />
+          <Tooltip api={api} content={MySegmentTooltip}>
+            <Gantt
+              init={setApi}
+              {...skinSettings}
+              tasks={data.tasks}
+              links={data.links}
+              scales={data.scales}
+              splitTasks={true}
+            />
+          </Tooltip>
         </ContextMenu>
         {api && <Editor api={api} />}
       </div>

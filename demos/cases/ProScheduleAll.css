@@ -21,3 +21,11 @@
 .bar.wx-D71fWZ7y .wx-field.wx-left {
   margin-bottom: 0px;
 }
+
+.demo.wx-D71fWZ7y .wednesday-off {
+  background-color: lavender;
+}
+
+.wx-willow-dark-theme .demo.wx-D71fWZ7y .wednesday-off {
+  background-color: #383650;
+}
