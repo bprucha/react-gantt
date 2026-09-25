@@ -1,0 +1,7 @@
+name: "Custom CodeQL Config"
+
+paths:
+  - "**/*.jsx"
+  - "**/*.js"
+  - "**/*.tsx"
+  - "**/*.ts"
