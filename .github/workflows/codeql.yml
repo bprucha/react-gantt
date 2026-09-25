@@ -63,6 +63,10 @@ jobs:
     # - name: Setup runtime (example)
     #   uses: actions/setup-example@v1
 
+    # Install your node modules so CodeQL can resolve semantic imports
+    - name: Install Dependencies
+      run: npm ci # or 'yarn install' / 'pnpm install'
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
