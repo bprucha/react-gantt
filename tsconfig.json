@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["node_modules/@types", "./src/types"],
+    "jsx": "react-jsx",
+    "target": "ES6", // Or higher
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+  }
+}
