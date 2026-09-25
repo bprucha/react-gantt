@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "es2022",
+    "allowJs": true
+  },
+  "exclude": ["node_modules", "dist", "build"]
+}
